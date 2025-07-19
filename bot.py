@@ -39,25 +39,29 @@ def predict_signal(df, model):
 
 def log_signal(df):
     if len(df) < 2:
-        print("Not enough data to compute return.")
+        print("Not enough data to compute profit.")
         return
 
-    signal_row = df.iloc[-2]      # The candle where signal was generated
-    next_row = df.iloc[-1]        # The next candle after signal
+    signal_row = df.iloc[-2]
+    next_row = df.iloc[-1]
 
     timestamp = signal_row['timestamp']
     signal = signal_row['final_signal']
-    signal_price = signal_row['close']
-    next_price = next_row['close']
+    entry_price = signal_row['close']
+    next_close = next_row['close']
 
-    pct_return = ((next_price - signal_price) / signal_price) * 100
-    pct_return = round(pct_return, 3)
+    # ✅ Real profit percent (based on signal direction)
+    if signal == 'BUY':
+        profit_pct = ((next_close - entry_price) / entry_price) * 100
+    else:  # 'SELL'
+        profit_pct = ((entry_price - next_close) / entry_price) * 100
+
+    profit_pct = round(profit_pct, 3)
 
     with open('signals.txt', 'a') as f:
-        f.write(f"{timestamp} | {symbol} | Price: {signal_price:.2f} | Signal: {signal} | Return: {pct_return}%\n")
+        f.write(f"{timestamp} | {symbol} | Entry: {entry_price:.2f} | Signal: {signal} | Profit: {profit_pct}%\n")
 
-    print(f"✅ {timestamp} | Signal: {signal} | Return: {pct_return}% | Logged.")
-
+    print(f"✅ {timestamp} | Signal: {signal} | Profit: {profit_pct}% | Logged.")
 # 🔁 Loop forever
 while True:
     try:
