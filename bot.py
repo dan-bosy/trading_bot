@@ -68,4 +68,4 @@ while True:
         log_signal(df)
     except Exception as e:
         print(f"❌ Error: {e}")
-    time.sleep(1)  # 5 minutes
+    time.sleep(300)  # 5 minutes
