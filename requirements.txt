@@ -1,0 +1,9 @@
+requests
+websocket-client
+selenium
+webdriver-manager
+google-auth-oauthlib
+google-auth-httplib2
+pycryptodome
+schedule
+sqlite3
